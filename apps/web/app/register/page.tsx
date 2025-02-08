@@ -91,33 +91,40 @@ const RegisterPage = () => {
         borderRadius={2}
         bgcolor="background.paper"
       >
-        <Typography variant="h4" align="center" gutterBottom>
-          Register
-        </Typography>
-        <TextField
-          fullWidth
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          margin="normal"
-        />
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          onClick={handleRegister}
-          sx={{ mt: 2 }}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleRegister();
+          }}
         >
-          Register
-        </Button>
+          <Typography variant="h4" align="center" gutterBottom>
+            Register
+          </Typography>
+          <TextField
+            fullWidth
+            label="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            margin="normal"
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+            sx={{ mt: 2 }}
+          >
+            Register
+          </Button>
+        </form>
 
         <Snackbar
           open={open}
