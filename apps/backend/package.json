@@ -1,0 +1,45 @@
+{
+  "name": "backend-repo",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsup --config scripts/tsup.config.build.ts",
+    "dev": "NODE_ENV=development tsup --watch --config scripts/tsup.config.dev.ts",
+    "start": "NODE_ENV=production node --enable-source-maps -r ./dist/app.js",
+    "dpdm": "dpdm --no-warning --no-tree ./src/core/app.ts",
+    "clean": "rimraf dist node_modules",
+    "knip": "knip",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "dependencies": {
+    "@repo/shared-types": "workspace:^",
+    "@types/cors": "^2.8.17",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "firebase-admin": "^13.1.0",
+    "http-status-codes": "^2.3.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.1",
+    "dpdm": "^3.14.0",
+    "eslint": "^9.20.0",
+    "eslint-config-prettier": "^10.0.1",
+    "knip": "^5.43.6",
+    "prettier": "^3.4.2",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.23.0"
+  }
+}

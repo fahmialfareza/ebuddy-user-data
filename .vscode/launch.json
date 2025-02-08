@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm run dev",
+      "cwd": "${workspaceFolder}/apps/web",
+      "sourceMaps": true,
+      "serverReadyAction": {
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome",
+        "webRoot": "${workspaceFolder}/apps/web"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "backend",
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}/apps/backend",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"]
+    }
+  ]
+}
