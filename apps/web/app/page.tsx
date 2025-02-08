@@ -41,7 +41,6 @@ export default function DataTable() {
   useEffect(() => {
     if (isSuccess) {
       setUsers(data);
-      setSnackBarOpen(true);
     }
   }, [data, isSuccess]);
 
