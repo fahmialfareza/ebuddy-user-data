@@ -23,7 +23,7 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ### Utilities
 
-This Turborepo has some additional tools already setup for you:
+This Turborepo has some additional tools already set up for you:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [ESLint](https://eslint.org/) for code linting
@@ -68,6 +68,18 @@ Next, you can link your Turborepo to your Remote Cache by running the following 
 ```
 npx turbo link
 ```
+
+## Deployment Environment
+
+You can test the deployment environment for the `web` app here:
+
+[ebuddy-user-data-web.vercel.app](https://ebuddy-user-data-web.vercel.app)
+
+## Backend Documentation
+
+For documentation on the backend, you can view it at the following link:
+
+[Backend Documentation - Postman](https://documenter.getpostman.com/view/3884681/2sAYX9kepb)
 
 ## Useful Links
 
