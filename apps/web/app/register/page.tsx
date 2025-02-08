@@ -47,6 +47,7 @@ const RegisterPage = () => {
       dispatch(setToken(token));
       setMessage("Register successful!");
     } catch (error) {
+      console.error(error);
       setMessage("Register failed!");
     }
 
@@ -73,7 +74,7 @@ const RegisterPage = () => {
     if (token) {
       router.push("/");
     }
-  }, [token]);
+  }, [token, router]);
 
   return (
     <Box

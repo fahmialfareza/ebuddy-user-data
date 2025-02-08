@@ -9,7 +9,6 @@ import {
   SnackbarCloseReason,
   IconButton,
   Snackbar,
-  FormGroup,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { signIn } from "../../apis/firebase";
@@ -48,6 +47,7 @@ const LoginPage = () => {
       dispatch(setToken(token));
       setMessage("Login successful!");
     } catch (error) {
+      console.error(error);
       setMessage("Login failed!");
     }
 
@@ -74,7 +74,7 @@ const LoginPage = () => {
     if (token) {
       router.push("/");
     }
-  }, [token]);
+  }, [token, router]);
 
   return (
     <Box

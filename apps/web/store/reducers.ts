@@ -1,18 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const getInitialToken = () => {
+  if (typeof window !== "undefined" && localStorage) {
+    return localStorage.getItem("token");
+  }
+  return null;
+};
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    token: (localStorage && localStorage.getItem("token")) || null,
+    token: getInitialToken(), // Get the token only on the client side
   },
   reducers: {
     setToken: (state, action) => {
       state.token = action.payload;
-      localStorage.setItem("token", action.payload);
+      if (typeof window !== "undefined" && localStorage) {
+        localStorage.setItem("token", action.payload);
+      }
     },
     clearToken: (state) => {
       state.token = null;
-      localStorage.removeItem("token");
+      if (typeof window !== "undefined" && localStorage) {
+        localStorage.removeItem("token");
+      }
     },
   },
 });
