@@ -9,6 +9,7 @@ import {
   Typography,
   CircularProgress,
   Button,
+  Snackbar,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -26,6 +27,8 @@ export default function DataTable() {
   const [selectedUser, setSelectedUser] = useState<Partial<User> | null>(null);
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
 
   // Fetch data using react-query
   const { data, isSuccess, isError, isLoading, refetch } = useQuery({
@@ -37,6 +40,12 @@ export default function DataTable() {
   useEffect(() => {
     if (isSuccess) {
       setUsers(data);
+      setSnackBarOpen(true);
+      setMessage("Data loaded successfully!");
+
+      setTimeout(() => {
+        setSnackBarOpen(false);
+      }, 5000);
     }
   }, [data, isSuccess]);
 
@@ -66,7 +75,13 @@ export default function DataTable() {
       await updateUser(selectedUser.id, selectedUser);
       setOpen(false);
       setSelectedUser(null);
+      setMessage("User created/updated successfully!");
+      setSnackBarOpen(true);
       refetch(); // Refresh the data
+
+      setTimeout(() => {
+        setSnackBarOpen(false);
+      }, 5000);
     }
   };
 
@@ -75,7 +90,13 @@ export default function DataTable() {
       await deleteUser(selectedUser.id);
       setDeleteOpen(false);
       setSelectedUser(null);
+      setMessage("User deleted successfully!");
+      setSnackBarOpen(true);
       refetch(); // Refresh the data
+
+      setTimeout(() => {
+        setSnackBarOpen(false);
+      }, 5000);
     }
   };
 
@@ -255,6 +276,15 @@ export default function DataTable() {
           handleDelete={handleDelete}
         />
       </Box>
+
+      <Snackbar
+        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+        open={snackBarOpen}
+        onClose={handleClose}
+        key={"bottom" + "center"}
+      >
+        <>{message}</>
+      </Snackbar>
     </Container>
   );
 }
