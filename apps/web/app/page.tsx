@@ -10,6 +10,7 @@ import {
   CircularProgress,
   Button,
   Snackbar,
+  Alert,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -41,11 +42,6 @@ export default function DataTable() {
     if (isSuccess) {
       setUsers(data);
       setSnackBarOpen(true);
-      setMessage("Data loaded successfully!");
-
-      setTimeout(() => {
-        setSnackBarOpen(false);
-      }, 5000);
     }
   }, [data, isSuccess]);
 
@@ -283,7 +279,7 @@ export default function DataTable() {
         onClose={handleClose}
         key={"bottom" + "center"}
       >
-        <>{message}</>
+        <Alert severity="info">{message}</Alert>
       </Snackbar>
     </Container>
   );
