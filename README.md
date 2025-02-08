@@ -91,3 +91,53 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
 - [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
 - [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+
+---
+
+## Part 4: Firestore Query Explanation
+
+To prioritize and retrieve the highest potential users, the query considers the following factors in descending order:
+
+1. **Total Average Weighted Ratings** (highest priority)
+2. **Number of Rents**
+3. **Recent Activity**
+
+### Firestore Query:
+
+```typescript
+const usersRef = db.collection("users");
+const query = usersRef
+  .orderBy("totalAverageWeightRatings", "desc")
+  .orderBy("numberOfRents", "desc")
+  .orderBy("recentlyActive", "desc")
+  .limit(10);
+const snapshot = await query.get();
+```
+
+This query will retrieve users in the following order: **User A → User B → User C**, as specified.
+
+---
+
+## Part 5: Personality & Technical Questions
+
+### 1. What are the most difficult technical problems in your work experience, and how did you fix them?
+
+In one of my past projects, I had to handle real-time synchronization of data across thousands of concurrent users using Firebase. The challenge was managing performance and minimizing latency. I optimized database queries, implemented caching, and reduced unnecessary read/writes to achieve a smooth real-time experience.
+
+### 2. When you’re working on a project, how do you typically approach it from start to finish?
+
+I follow a structured approach:
+
+- **Research & Requirements Analysis:** Understand the scope and define clear goals.
+- **Planning:** Create a roadmap with milestones.
+- **Development:** Code iteratively, ensuring unit tests and proper version control.
+- **Testing:** Conduct thorough testing to ensure reliability.
+- **Deployment & Maintenance:** Ensure a smooth deployment and address post-launch issues.
+
+### 3. How do you usually approach learning a new topic to absorb as much as possible?
+
+I prefer a combination of hands-on practice, reading official documentation, and watching tutorials. I reinforce my understanding by building small projects and experimenting with the new topic.
+
+### 4. “Consistency” vs. “Fast & Efficient”: Which one do you choose?
+
+**Consistency**. Consistency ensures long-term success and builds sustainable systems, while fast results often compromise quality.
