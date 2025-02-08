@@ -7,8 +7,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN npm install --global corepack@latest
 RUN corepack enable
 
-# Install specific version of pnpm (version 9)
-RUN corepack prepare pnpm@9 --activate
+# Install specific version of pnpm (version 8)
+RUN corepack prepare pnpm@8 --activate
 
 WORKDIR /app
 
