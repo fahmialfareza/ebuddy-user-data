@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { RootState } from "../store/store";
 import { deleteUser, getUser, updateUser } from "../apis/userApi";
 import { User } from "@repo/shared-types";
@@ -82,9 +82,25 @@ export default function DataTable() {
     setDeleteOpen(false);
   };
 
-  const handleUpsert = async () => {
-    if (selectedUser && selectedUser.id) {
-      await updateUser(selectedUser.id, selectedUser);
+  const userUpsertMutation = useMutation({
+    mutationFn: (params: { id: string; user: Partial<User> }) =>
+      updateUser(params.id, params.user),
+    onError: (error) => {
+      const err = error as AxiosError;
+      if (err.status === 401 || err.status === 403) {
+        dispatch(
+          setSnackBar({
+            snackBarOpen: true,
+            message: "Token expired, please login again.",
+          })
+        );
+        setTimeout(() => {
+          dispatch(clearSnackBar());
+        }, 5000);
+        router.push("/login");
+      }
+    },
+    onSuccess: () => {
       setOpen(false);
       setSelectedUser(null);
       dispatch(
@@ -98,12 +114,37 @@ export default function DataTable() {
       setTimeout(() => {
         dispatch(clearSnackBar());
       }, 5000);
+    },
+  });
+
+  const handleUpsert = async () => {
+    if (!selectedUser || !selectedUser.id) {
+      return;
     }
+    userUpsertMutation.mutate({
+      id: selectedUser.id,
+      user: selectedUser,
+    });
   };
 
-  const handleDelete = async () => {
-    if (selectedUser && selectedUser.id) {
-      await deleteUser(selectedUser.id);
+  const userDeleteMutation = useMutation({
+    mutationFn: (id: string) => deleteUser(id),
+    onError: (error) => {
+      const err = error as AxiosError;
+      if (err.status === 401 || err.status === 403) {
+        dispatch(
+          setSnackBar({
+            snackBarOpen: true,
+            message: "Token expired, please login again.",
+          })
+        );
+        setTimeout(() => {
+          dispatch(clearSnackBar());
+        }, 5000);
+        router.push("/login");
+      }
+    },
+    onSuccess: () => {
       setDeleteOpen(false);
       setSelectedUser(null);
       dispatch(
@@ -117,7 +158,14 @@ export default function DataTable() {
       setTimeout(() => {
         dispatch(clearSnackBar());
       }, 5000);
+    },
+  });
+
+  const handleDelete = async () => {
+    if (!selectedUser || !selectedUser.id) {
+      return;
     }
+    userDeleteMutation.mutate(selectedUser.id);
   };
 
   const handleChange = (field: keyof User, value: string | number) => {
