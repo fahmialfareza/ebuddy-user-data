@@ -4,8 +4,8 @@ import Providers from "./providers";
 import Navbar from "../components/Header/Navbar";
 
 export const metadata = {
-  title: "My App",
-  description: "Next.js App with Redux and Firebase",
+  title: "Ebuddy User Data",
+  description: "Ebuddy user data built by Next.js App with Redux and Firebase",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
