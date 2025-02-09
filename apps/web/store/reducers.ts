@@ -1,16 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { combineReducers, createSlice } from "@reduxjs/toolkit";
 
-const getInitialToken = () => {
+const getUserInitialToken = () => {
   if (typeof window !== "undefined" && localStorage) {
     return localStorage.getItem("token");
   }
   return null;
 };
 
+const getSnackBarInitialState = () => {
+  return {
+    snackBarOpen: false,
+    message: "",
+  };
+};
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    token: getInitialToken(), // Get the token only on the client side
+    token: getUserInitialToken(), // Get the token only on the client side
   },
   reducers: {
     setToken: (state, action) => {
@@ -28,5 +35,27 @@ const userSlice = createSlice({
   },
 });
 
+const snackBarSlice = createSlice({
+  name: "snackBar",
+  initialState: getSnackBarInitialState(),
+  reducers: {
+    setSnackBar: (state, action) => {
+      state.snackBarOpen = action.payload.snackBarOpen;
+      state.message = action.payload.message;
+    },
+    clearSnackBar: (state) => {
+      state.snackBarOpen = false;
+      state.message = "";
+    },
+  },
+});
+
+const reducers = combineReducers({
+  user: userSlice.reducer,
+  snackBar: snackBarSlice.reducer,
+});
+
 export const { setToken, clearToken } = userSlice.actions;
-export default userSlice.reducer;
+export const { setSnackBar, clearSnackBar } = snackBarSlice.actions;
+
+export default reducers;

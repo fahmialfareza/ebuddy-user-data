@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import Head from "next/head";
 import Providers from "./providers";
 import Navbar from "../components/Header/Navbar";
+import SnackbarToast from "../components/Toast/SnackbarToast";
 
 export const metadata = {
   title: "Ebuddy User Data",
@@ -23,6 +24,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Navbar />
 
           {children}
+
+          <SnackbarToast />
         </Providers>
       </body>
     </html>

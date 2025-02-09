@@ -9,30 +9,31 @@ import {
   Typography,
   CircularProgress,
   Button,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { RootState } from "../store/store";
 import { deleteUser, getUser, updateUser } from "../apis/userApi";
 import { User } from "@repo/shared-types";
+import { AxiosError } from "axios";
 import DeleteUserDialog from "../components/Dialog/DeleteUserDialog";
 import EditeUserDialog from "../components/Dialog/EditUserDialog";
+import { clearSnackBar, clearToken, setSnackBar } from "../store/reducers";
 
 export default function DataTable() {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const { token } = useSelector((state: RootState) => state.user);
+
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<Partial<User> | null>(null);
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [message, setMessage] = useState("");
-  const [snackBarOpen, setSnackBarOpen] = useState(false);
 
   // Fetch data using react-query
-  const { data, isSuccess, isError, isLoading, refetch } = useQuery({
+  const { data, isSuccess, isError, isLoading, refetch, error } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUser(),
     enabled: !!token,
@@ -48,7 +49,23 @@ export default function DataTable() {
     if (!token) {
       router.push("/login");
     }
-  }, [token, router]);
+    if (error) {
+      const err = error as AxiosError;
+      if (err.status === 401 || err.status === 403) {
+        dispatch(clearToken());
+        dispatch(
+          setSnackBar({
+            snackBarOpen: true,
+            message: "Token expired, please login again.",
+          })
+        );
+        setTimeout(() => {
+          dispatch(clearSnackBar());
+        }, 5000);
+        router.push("/login");
+      }
+    }
+  }, [token, router, error, dispatch]);
 
   const handleRowClick = (params: GridRowParams) => {
     const user = params.row as User;
@@ -70,12 +87,16 @@ export default function DataTable() {
       await updateUser(selectedUser.id, selectedUser);
       setOpen(false);
       setSelectedUser(null);
-      setMessage("User created/updated successfully!");
-      setSnackBarOpen(true);
+      dispatch(
+        setSnackBar({
+          snackBarOpen: true,
+          message: "User created/updated successfully!",
+        })
+      );
       refetch(); // Refresh the data
 
       setTimeout(() => {
-        setSnackBarOpen(false);
+        dispatch(clearSnackBar());
       }, 5000);
     }
   };
@@ -85,12 +106,16 @@ export default function DataTable() {
       await deleteUser(selectedUser.id);
       setDeleteOpen(false);
       setSelectedUser(null);
-      setMessage("User deleted successfully!");
-      setSnackBarOpen(true);
+      dispatch(
+        setSnackBar({
+          snackBarOpen: true,
+          message: "User deleted successfully!",
+        })
+      );
       refetch(); // Refresh the data
 
       setTimeout(() => {
-        setSnackBarOpen(false);
+        dispatch(clearSnackBar());
       }, 5000);
     }
   };
@@ -271,15 +296,6 @@ export default function DataTable() {
           handleDelete={handleDelete}
         />
       </Box>
-
-      <Snackbar
-        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
-        open={snackBarOpen}
-        onClose={handleClose}
-        key={"bottom" + "center"}
-      >
-        <Alert severity="info">{message}</Alert>
-      </Snackbar>
     </Container>
   );
 }

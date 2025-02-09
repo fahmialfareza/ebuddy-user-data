@@ -11,7 +11,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", getUser);
+router.get("/", authMiddleware, getUser);
 router
   .route("/:userId")
   .get(validateData(getUserParamsSchema, undefined), authMiddleware, getUser)

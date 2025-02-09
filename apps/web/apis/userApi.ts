@@ -1,7 +1,7 @@
 import { apiWrapper } from "./axios";
 import { User } from "@repo/shared-types";
 
-export const getUser = async (userId?: string) => {
+export const getUser = async () => {
   const response = (await apiWrapper().get("/user")).data as User[];
   return response;
 };
